@@ -11,23 +11,23 @@
   /* universo (home) */
   --bg:#f7f0e4; --bg2:#efe4d1; --card:#fffaf2; --tinta:#1f1a15; --tinta2:#5b5046; --linha:#e3d6c1;
   --cor:#0f4c6e; --cor2:#1fa7a2; --pop:#e8743b; --cor-tinta:#fff;
-  --tb1:#1fa7a2; --tb2:#e8743b; --tb3:#8e2233; --tb-dobra:rgba(0,0,0,.18);
+  --tb1:#1fa7a2; --tb2:#e8743b; --tb3:#8e2233; --tb-dobra:rgba(255,255,255,.5);
   --listra:#2f6db5;
 }
 body[data-casa="restaurante"]{
   --bg:#f1f6f3; --bg2:#e1eeea; --card:#ffffff; --tinta:#132a2a; --tinta2:#476060; --linha:#cfe1dc;
   --cor:#0f6f6b; --cor2:#2f6db5; --pop:#d7372f; --cor-tinta:#fff;
-  --tb1:#1fa7a2; --tb2:#168e89; --tb3:#2fc0b9; --listra:#2f6db5;
+  --tb1:#22b0aa; --tb2:#12827d; --tb3:#0f6f6b; --listra:#2f6db5;
 }
 body[data-casa="beach-club"]{
   --bg:#f5efe5; --bg2:#ebe0cf; --card:#fffbf4; --tinta:#13213a; --tinta2:#4b5568; --linha:#e2d5c0;
   --cor:#12284a; --cor2:#d9a441; --pop:#e8743b; --cor-tinta:#fff;
-  --tb1:#e8743b; --tb2:#2f6db5; --tb3:#f39a62; --listra:#8db8e0;
+  --tb1:#ec7a3f; --tb2:#2f6db5; --tb3:#c95a24; --listra:#8db8e0;
 }
 body[data-casa="cafe-bistro"]{
   --bg:#f7ecdc; --bg2:#efdcc2; --card:#fffaf1; --tinta:#2b1710; --tinta2:#6a4a3c; --linha:#e7d2b6;
   --cor:#7a1f2b; --cor2:#c8362f; --pop:#e2b23a; --cor-tinta:#fff;
-  --tb1:#8e2233; --tb2:#c8362f; --tb3:#6e1a26; --listra:#c8362f;
+  --tb1:#7d1e2c; --tb2:#e2a93b; --tb3:#e2a93b; --listra:#c8362f;
 }
 
 *{box-sizing:border-box}
@@ -139,7 +139,8 @@ body[data-hora="noite"] .mapa-luzes{opacity:1}
 .pino:hover{box-shadow:0 14px 34px -12px rgba(30,20,10,.65),0 0 0 2px var(--pc)}
 .pino::after{content:"";position:absolute;left:50%;bottom:-7px;width:14px;height:14px;background:#fffaf2;transform:translateX(-50%) rotate(45deg);border-radius:2px;z-index:-1}
 .pino-tb{width:34px;height:34px;border-radius:50%;background:var(--pc);display:grid;place-items:center;flex:none;position:relative}
-.pino-tb svg{width:26px;height:30px;margin-top:-3px}
+.pino-tb{overflow:hidden}
+.pino-tb svg{width:32px;height:34px;margin-top:2px;margin-left:2px}
 .pino small{display:block;font:500 11px/1 var(--f-corpo);letter-spacing:.14em;text-transform:uppercase;color:#7a6e62;margin-top:4px}
 .pino .anel{position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--pc);opacity:0;animation:anel 2.6s ease-out infinite}
 @keyframes anel{0%{opacity:.7;transform:scale(.8)}100%{opacity:0;transform:scale(1.5)}}
@@ -182,14 +183,12 @@ body:not([data-casa="universo"]) .hora{top:calc(var(--topo) + 10px)}
 .baiana .tb1{fill:var(--tb1);transition:fill .9s var(--ease) .05s}
 .baiana .tb2{fill:var(--tb2);transition:fill .9s var(--ease) .2s}
 .baiana .tb3{fill:var(--tb3);transition:fill .9s var(--ease) .35s}
-.baiana .dobra{fill:none;stroke:var(--tb-dobra);stroke-width:2;stroke-linecap:round}
-.baiana .pele{fill:#6b3f28}.baiana .pele2{fill:#57311f}
-.baiana .brinco{fill:none;stroke:#d9a441;stroke-width:3.6}
-.baiana .conta{transition:fill .9s}
-.baiana .vestido{fill:#fffaf0}
-.baiana .listras{stroke:#fff;stroke-width:2.2;opacity:0;transition:opacity .8s}
-body[data-casa="beach-club"] .baiana .listras,body[data-casa="restaurante"] .baiana .listras{opacity:.5}
-.baiana .cabeca{transform-origin:90px 210px;transition:transform .9s var(--ease)}
+.baiana .dobra{fill:none;stroke:var(--tb-dobra);stroke-width:2.1;stroke-linecap:round}
+.baiana .sombra{fill:#000;opacity:.13}
+.baiana .camada{fill:#fff;opacity:.12}
+.baiana .brinco{fill:none;stroke:#efd9a8;stroke-width:4.2}
+.baiana.mini .alca{display:none}
+.baiana .cabeca{transform-origin:110px 250px;transition:transform .9s var(--ease)}
 .baiana.troca .cabeca{animation:aceno .9s var(--ease)}
 @keyframes aceno{40%{transform:rotate(-4deg) translateY(-3px)}}
 
@@ -215,9 +214,10 @@ h2.grande em{font-style:italic;font-weight:300;color:var(--cor)}
 .casa-card:hover{transform:translateY(-6px);box-shadow:0 1px 0 var(--linha),0 34px 50px -30px rgba(40,25,10,.6)}
 .casa-card .cc-topo{height:190px;background:var(--cc);position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
 .casa-card .cc-topo .toldo{position:absolute;top:0;left:0;right:0;--listra:#fff;opacity:.95;background:repeating-linear-gradient(90deg,#fff 0 30px,transparent 30px 60px)}
-.casa-card .cc-baiana{width:132px;height:160px;margin-bottom:-6px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.25));transition:transform .6s var(--ease)}
+.casa-card .cc-disco{position:absolute;left:50%;bottom:-58px;width:196px;height:196px;border-radius:50%;background:#fffaf2;transform:translateX(-50%);box-shadow:0 0 0 6px color-mix(in srgb,#fff 30%,transparent)}
+.casa-card .cc-baiana{position:relative;left:12px;width:150px;height:242px;margin-bottom:-60px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.25));transition:transform .6s var(--ease)}
 .casa-card:hover .cc-baiana{transform:translateY(-6px) rotate(-2deg)}
-.casa-card .cc-momento{position:absolute;left:16px;bottom:14px;font:500 22px/1 var(--f-mao);color:#fff;opacity:.95}
+.casa-card .cc-momento{position:absolute;left:18px;top:44px;z-index:2;font:500 22px/1 var(--f-mao);color:#fff;opacity:.95}
 .casa-card .cc-corpo{padding:22px 24px 26px;display:flex;flex-direction:column;gap:6px;flex:1}
 .casa-card h3{font:500 28px/1.05 var(--f-display);margin:0}
 .casa-card .cc-onde{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta2)}

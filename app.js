@@ -13,9 +13,9 @@
   const CORES = { "cafe-bistro": "#8e2233", restaurante: "#1fa7a2", "beach-club": "#e8743b", universo: "#0f4c6e" };
   const TURBANTES = {
     universo: ["#1fa7a2", "#e8743b", "#8e2233"],
-    restaurante: ["#1fa7a2", "#168e89", "#2fc0b9"],
-    "beach-club": ["#e8743b", "#2f6db5", "#f39a62"],
-    "cafe-bistro": ["#8e2233", "#c8362f", "#6e1a26"],
+    restaurante: ["#22b0aa", "#12827d", "#0f6f6b"],
+    "beach-club": ["#ec7a3f", "#2f6db5", "#c95a24"],
+    "cafe-bistro": ["#7d1e2c", "#e2a93b", "#e2a93b"],
   };
   const ORDEM = ["cafe-bistro", "restaurante", "beach-club"];
   const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -24,26 +24,34 @@
 
   /* ---------- a baiana (guardiã do universo) ---------- */
   function baiana({ corpo = true, fixa = null, cls = "" } = {}) {
-    // fixa: força cores de uma casa (cards); null = segue o tema da página
+    // Redesenho fiel ao logo: perfil voltado à esquerda, turbante alto com faixa e dobras, argola oval.
+    // fixa: força as cores de uma casa (cards, pinos); null = segue o tema da página
     const st = fixa ? ` style="--tb1:${TURBANTES[fixa][0]};--tb2:${TURBANTES[fixa][1]};--tb3:${TURBANTES[fixa][2]}"` : "";
-    const vb = corpo ? "20 6 170 254" : "26 8 132 196";
+    const vb = corpo ? "34 20 176 284" : "36 26 172 192";
     return `<svg class="baiana ${corpo ? "" : "mini"} ${cls}" viewBox="${vb}" aria-hidden="true"${st}>
-  ${corpo ? `<path class="vestido" d="M28 262 C40 236 62 226 86 228 L122 228 C146 228 166 240 176 262 Z"/>
-  <path class="pele" d="M86 228 C96 238 112 238 122 228 L120 214 L86 214 Z"/>
-  <g class="contas">${Array.from({ length: 15 }, (_, i) => { const t = i / 14, x = 74 + t * 62, y = 230 + Math.sin(t * Math.PI) * 18; const c = [TURBANTES.universo[0], "#f2c94c", TURBANTES.universo[1], "#fffaf0", TURBANTES.universo[2]][i % 5]; return `<circle class="conta" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4" fill="${c}"/>`; }).join("")}</g>` : ""}
+  <defs><linearGradient id="sb-pele" x1="0" y1="0" x2="1" y2="0.25"><stop offset="0" stop-color="#8b5131"/><stop offset=".45" stop-color="#6e3d22"/><stop offset="1" stop-color="#55301b"/></linearGradient></defs>
   <g class="cabeca">
-    <path class="pele" d="M74 250 C76 226 80 206 78 188 C70 178 66 160 70 146 L124 96 C130 104 134 112 135 120 C136 124 137 127 140 131 C145 137 151 142 150 146 C149 149 145 149 141 149 C143 151 146 153 145 156 C143 158 141 158 140 159 C143 161 145 164 142 167 C139 169 137 170 137 173 C138 178 136 183 130 186 C124 189 118 190 116 196 C114 210 116 232 120 250 Z"/>
-    <path class="pele2" d="M96 140 C104 137 109 147 103 155 C100 157 96 153 96 149 Z"/>
-    <path d="M124 123 C127 125.5 130 125.5 133 123.5" fill="none" stroke="#2b160b" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M139 157.5 C141 158.5 142.5 158.5 144 157.5" fill="none" stroke="#3d1d10" stroke-width="1.2" stroke-linecap="round"/>
-    <circle class="brinco" cx="100" cy="170" r="11"/>
-    <path class="tb1" d="M122 100 C127 72 121 42 99 27 C80 14 53 18 41 34 C29 50 29 77 39 97 C45 113 52 131 66 147 C78 151 92 143 100 134 C104 120 112 106 122 100 Z"/>
-    <path class="tb2" d="M121 86 C104 71 70 67 37 81 C36 73 37 65 40 57 C70 46 105 52 125 71 Z"/>
-    <path class="tb3" d="M113 47 C93 35 64 35 45 45 C50 36 58 28 70 24 C87 21 103 30 113 47 Z"/>
-    <g class="listras" fill="none"><path d="M44 63 C70 54 98 58 120 74"/><path d="M39 72 C68 62 100 66 122 80"/></g>
-    <path class="dobra" d="M48 108 C64 100 84 100 102 112"/><path class="dobra" d="M56 126 C70 118 84 118 98 126"/><path class="dobra" d="M58 34 C70 30 86 32 98 40"/>
-    <path class="tb3" d="M103 31 C110 17 128 19 129 33 C130 46 117 51 108 45 C104 41 102 36 103 31 Z"/>
-    <path class="dobra" d="M110 30 C116 28 122 32 122 38"/>
+    <path class="pele" fill="url(#sb-pele)" d="M72 100 C66 108 62 116 62 124 C62 128 60 131 58 134 C55 140 50 145 47.5 150 C46.5 153 49 155.5 53 155.5 C52 158 50.5 159.5 50.8 162 C51 164.2 54 165 56.2 165.4 C53 167 52.4 169.6 53.2 171.6 C54.2 173.6 57 174.4 58.6 174.6 C57.6 177.4 57 181 58.6 184 C60.6 187.4 66 189 72 189.6 C76 190 79 191 81 193 C86 200 89 212 90 226 C91 238 91 250 87 262 L82 304 L206 304 C204 288 194 276 180 268 C168 262 157 258 148 252 C142 240 138 222 136 204 C135 190 130 178 124 168 Z"/>
+    <path d="M66 121 C71 118.5 78 118.5 84 121.5" fill="none" stroke="#2a140a" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+    <path d="M69 130 C72.5 133.5 78 133.6 82 130.2" fill="none" stroke="#1f0f07" stroke-width="2" stroke-linecap="round"/>
+    <path d="M71.5 132.2 l-2 2.6 M74.6 133.4 l-1.2 3 M77.8 133.4 l-.4 3" stroke="#1f0f07" stroke-width="1.1" stroke-linecap="round"/>
+    <path d="M52.5 165.2 C54 165.6 55.6 165.6 57.4 165.3" fill="none" stroke="#3a190c" stroke-width="1.2" stroke-linecap="round" opacity=".75"/>
+    <path class="alca" d="M153 255 C142 264 118 268 94 259" fill="none" stroke="#efd9a8" stroke-width="2.8" stroke-linecap="round"/>
+    <path class="alca" d="M150 252 C160 262 168 276 172 304" fill="none" stroke="#efd9a8" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>
+    <ellipse class="brinco" cx="109" cy="199" rx="8.6" ry="15.5"/>
+    <ellipse cx="109" cy="199" rx="8.6" ry="15.5" fill="none" stroke="#a77b2c" stroke-width="1" stroke-opacity=".55" transform="translate(1.4 1)"/>
+    <path class="tb1" d="M70 100 C65 84 73 66 90 56 C104 44 124 34 146 32 C172 30 192 46 194 70 C196 96 184 118 168 132 C156 146 144 160 128 170 C112 152 92 118 70 100 Z"/>
+    <path class="sombra" d="M146 32 C172 30 192 46 194 70 C196 96 184 118 168 132 C156 146 144 160 128 170 C140 150 160 128 168 104 C176 80 168 50 146 32 Z"/>
+    <path class="camada" d="M73 98 C68 82 77 66 93 57 C109 48 127 44 141 48 C122 55 105 69 97 88 C93 97 84 102 73 98 Z"/>
+    <path class="tb3" d="M150 33 C174 33 192 48 194 70 C196 96 184 118 168 132 L161 125 C175 110 184 92 182 72 C180 52 168 40 150 33 Z"/>
+    <path class="tb2" d="M70 100 C92 118 112 150 128 170 L137 163 C122 140 100 106 79 91 C75 93 72 96 70 100 Z"/>
+    <g class="dobra">
+      <path d="M86 70 C104 58 128 52 154 56"/>
+      <path d="M90 86 C112 74 138 72 162 80"/>
+      <path d="M100 106 C120 96 146 96 166 106"/>
+      <path d="M116 128 C132 120 150 120 160 126"/>
+      <path d="M120 40 C130 46 136 56 136 66"/>
+    </g>
   </g>
 </svg>`;
   }
@@ -81,9 +89,9 @@
 
   async function carregaMapa() {
     const [base, luzes, meta] = await Promise.all([
-      fetch("assets/map-base.svg?v=20261122b").then((r) => r.text()),
-      fetch("assets/map-lights.svg?v=20261122b").then((r) => r.text()),
-      fetch("assets/map-meta.json?v=20261122b").then((r) => r.json()),
+      fetch("assets/map-base.svg?v=20261122c").then((r) => r.text()),
+      fetch("assets/map-lights.svg?v=20261122c").then((r) => r.text()),
+      fetch("assets/map-meta.json?v=20261122c").then((r) => r.json()),
     ]);
     $("#mapaBase").innerHTML = base;
     $("#mapaLuzes").innerHTML = luzes;
@@ -215,7 +223,7 @@
       <p class="texto rv">Repare no turbante: em cada casa ele muda de cor. Turquesa no Restaurante, laranja e azul no Beach Club, vinho no Café. A mesma alma, o mesmo cuidado, em três momentos do dia em Guaratiba.</p>
       <div class="casas">${ORDEM.map((id) => { const c = D.casas[id]; return `
         <a class="casa-card rv" href="#/${id}" style="--cc:${CORES[id]}">
-          <div class="cc-topo"><div class="toldo"></div><span class="cc-momento">de ${c.momento}</span><div class="cc-baiana">${baiana({ fixa: id })}</div></div>
+          <div class="cc-topo"><div class="toldo"></div><span class="cc-momento">de ${c.momento}</span><span class="cc-disco" aria-hidden="true"></span><div class="cc-baiana">${baiana({ fixa: id })}</div></div>
           <div class="cc-corpo"><span class="cc-onde">${c.onde}</span><h3>${c.nome}</h3><p>${c.tagline}</p><span class="cc-ir">Entrar na casa <span>→</span></span></div>
         </a>`; }).join("")}</div>
     </section>
