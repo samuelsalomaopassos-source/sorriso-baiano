@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sorriso Baiano · Restaurante, Beach Club e Café & Bistrô em Guaratiba, Prado–BA</title>
+<meta name="description" content="O Universo Sorriso Baiano: três casas na Praia de Guaratiba, Prado–BA. Cozinha baiana com sotaque mediterrâneo — Restaurante, Beach Club e Café & Bistrô. Cardápio, eventos e reservas.">
+<meta name="theme-color" content="#0f4c6e">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.instagram.com https://static.cdninstagram.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://www.instagram.com; connect-src 'self' https://docs.google.com https://*.googleusercontent.com; base-uri 'self'; form-action 'none'; object-src 'none'">
+<meta property="og:title" content="Sorriso Baiano · Três casas, um só sorriso">
+<meta property="og:description" content="Restaurante, Beach Club e Café & Bistrô na Praia de Guaratiba, Prado–BA.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Instrument+Sans:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"Sorriso Baiano","foundingDate":"2013","address":{"@type":"PostalAddress","addressLocality":"Prado","addressRegion":"BA","addressCountry":"BR","streetAddress":"Praia de Guaratiba"},"sameAs":["https://www.instagram.com/restaurantesorrisobaiano/","https://www.instagram.com/sorrisobaianobeachclub/","https://www.instagram.com/sorrisobaianocafebistro/"]}
+</script>
+</head>
+<body data-casa="universo" data-hora="tarde">
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="f-noite" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.20 0.07 0.05 0 0.012  0.07 0.24 0.09 0 0.022  0.09 0.19 0.46 0 0.07  0 0 0 1 0"/></filter>
+  <filter id="f-por" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1.02 0.12 0 0 0.03  0.05 0.80 0.05 0 0.01  0.02 0.06 0.62 0 0.02  0 0 0 1 0"/></filter>
+  <filter id="f-manha" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1.03 0.03 0 0 0.02  0 1.0 0.02 0 0.012  0 0 0.94 0 0.012  0 0 0 1 0"/></filter>
+</svg>
+
+<header class="topo" id="topo">
+  <a class="marca" href="#/" aria-label="Sorriso Baiano — início">
+    <span class="marca-baiana" data-baiana="mini"></span>
+    <span class="marca-texto"><span class="marca-nome">Sorriso Baiano</span><span class="marca-sub" id="marcaSub">universo</span></span>
+  </a>
+  <nav class="menu" aria-label="Casas">
+    <a href="#/cafe-bistro" data-link="cafe-bistro"><i class="dot"></i>Café &amp; Bistrô</a>
+    <a href="#/restaurante" data-link="restaurante"><i class="dot"></i>Restaurante</a>
+    <a href="#/beach-club" data-link="beach-club"><i class="dot"></i>Beach Club</a>
+  </nav>
+  <button class="btn btn-reservar" data-reservar type="button">Reservar</button>
+</header>
+
+<main id="conteudo">
+  <!-- Mapa: palco que acompanha todas as páginas -->
+  <section class="palco" id="palco" aria-label="Mapa de Guaratiba">
+    <div class="ceu" aria-hidden="true">
+      <div class="astro" id="astro"></div>
+      <div class="nuvem n1"></div><div class="nuvem n2"></div><div class="nuvem n3"></div>
+      <div class="estrelas"></div>
+    </div>
+    <div class="palco-texto" id="palcoTexto"></div>
+    <div class="mapa-janela" id="mapaJanela">
+      <div class="mapa" id="mapa">
+        <div class="mapa-base" id="mapaBase"></div>
+        <div class="mapa-noite" aria-hidden="true"></div>
+        <div class="mapa-luzes" id="mapaLuzes" aria-hidden="true"></div>
+        <div class="pinos" id="pinos"></div>
+      </div>
+    </div>
+    <div class="hora" id="hora" role="group" aria-label="Ver Guaratiba em outra hora do dia">
+      <span class="hora-agora" id="horaAgora"></span>
+      <div class="hora-opcoes">
+        <button type="button" data-hora="manha">Manhã</button>
+        <button type="button" data-hora="tarde">Tarde</button>
+        <button type="button" data-hora="por-do-sol">Pôr do sol</button>
+        <button type="button" data-hora="noite">Noite</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="vista"></div>
+</main>
+
+<footer class="rodape" id="rodape"></footer>
+
+<div class="folha" id="folha" hidden>
+  <div class="folha-fundo" data-fechar></div>
+  <div class="folha-corpo" role="dialog" aria-modal="true" aria-labelledby="folhaTitulo">
+    <button class="folha-x" data-fechar type="button" aria-label="Fechar">×</button>
+    <h2 id="folhaTitulo">Onde vai ser?</h2>
+    <p class="folha-sub">Escolha a casa e fale direto com a equipe.</p>
+    <div class="folha-lista" id="folhaLista"></div>
+  </div>
+</div>
+
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
