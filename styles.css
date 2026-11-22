@@ -68,8 +68,7 @@ body[data-hora="noite"] .topo:not(.solido),body[data-hora="por-do-sol"][data-cas
 .btn svg{width:18px;height:18px}
 
 /* ============ palco / mapa ============ */
-.palco{position:relative;height:100svh;min-height:600px;overflow:hidden;isolation:isolate;
-  transition:height 1.1s var(--ease-voo)}
+.palco{position:relative;height:100svh;min-height:600px;overflow:hidden;isolation:isolate}
 body:not([data-casa="universo"]) .palco{height:72svh;min-height:520px}
 .ceu{position:absolute;inset:0;z-index:-1;transition:background 1.2s;background:linear-gradient(180deg,#a9d8ec 0%,#d9eff3 55%,#f3ede0 100%)}
 body[data-hora="manha"] .ceu{background:linear-gradient(180deg,#bfe0ef 0%,#f8e3c8 62%,#fbefdc 100%)}
@@ -98,19 +97,20 @@ body[data-hora="por-do-sol"] .nuvem{background:#ffd9c2;opacity:.6}
 .mapa{position:absolute;left:0;top:0;width:1600px;aspect-ratio:1600/1100;transform-origin:0 0;will-change:transform;
   transition:transform 1.25s var(--ease-voo)}
 .mapa.sem-anim{transition:none}
-.mapa-base,.mapa-luzes{position:absolute;inset:0}
-.mapa-base svg,.mapa-luzes svg{width:100%;height:100%}
-.mapa-base{transition:opacity .35s}
-.mapa-base.trocando{opacity:.35}
-body[data-hora="manha"] .mapa-base{filter:url(#f-manha)}
-body[data-hora="por-do-sol"] .mapa-base{filter:url(#f-por)}
-body[data-hora="noite"] .mapa-base{filter:url(#f-noite)}
-.mapa-noite{display:none}
-.mapa-luzes{opacity:0;transition:opacity 1.6s;pointer-events:none;filter:drop-shadow(0 0 3px rgba(255,196,110,.95)) drop-shadow(0 0 8px rgba(255,170,80,.55))}
+.mapa.voando .wave,.mapa.voando .pino,.mapa.voando #whale *{animation-play-state:paused}
+.mapa-base,.mapa-luzes,.mapa-anim{position:absolute;inset:0}
+.mapa-base svg,.mapa-luzes svg,.mapa-anim svg{width:100%;height:100%}
+.mapa-anim{pointer-events:none;transition:opacity 1.2s}
+.mapa-anim #whale{pointer-events:auto}
+body[data-hora="noite"] .mapa-anim{opacity:.4}
+body[data-hora="por-do-sol"] .mapa-anim{opacity:.8}
+.mapa-base .camada{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
+.mapa-base .camada.on{opacity:1}
+.mapa-base .camada svg{width:100%;height:100%}
+.mapa-luzes{opacity:0;transition:opacity 1.6s;pointer-events:none}
 body[data-hora="por-do-sol"] .mapa-luzes{opacity:.6}
 body[data-hora="noite"] .mapa-luzes{opacity:1}
-.mapa-luzes .bulb{fill:#ffe2a3;animation:brilho 3s ease-in-out infinite alternate}
-.mapa-luzes .bulb:nth-child(3n){animation-delay:-1s}.mapa-luzes .bulb:nth-child(4n){animation-delay:-2s}
+.mapa-luzes .bulb{fill:#ffe2a3}
 .mapa-luzes .wire{stroke:#2a1e14;stroke-width:.6;opacity:.6}
 .mapa-luzes .lantern{fill:#ffcf7a;opacity:.9}
 .mapa-luzes .glow-win{fill:#ffcf7a;opacity:.95}
@@ -118,10 +118,9 @@ body[data-hora="noite"] .mapa-luzes{opacity:1}
 @keyframes brilho{to{opacity:.6}}
 
 /* animações dentro do SVG */
-.map-svg .wave{stroke-dasharray:28 18;animation:onda 7s linear infinite}
-.map-svg .wave.w1{animation-duration:9s}.map-svg .wave.w2{animation-duration:11s;animation-direction:reverse}
+.map-anim .wave{stroke-dasharray:28 18;animation:onda 7s linear infinite}
+.map-anim .wave.w1{animation-duration:9s}.map-anim .wave.w2{animation-duration:11s;animation-direction:reverse}
 @keyframes onda{to{stroke-dashoffset:-92}}
-.map-svg .foam{stroke-dasharray:60 10 30 14;animation:onda 14s linear infinite}
 #whale{cursor:pointer;outline:none}
 #whale .whale-body{transform:translateY(16px);opacity:0;animation:baleia 22s ease-in-out infinite 4s}
 #whale .whale-splash{opacity:0;transform-origin:center;animation:respingo 22s ease-out infinite 4s}
@@ -144,7 +143,7 @@ body[data-hora="noite"] .mapa-luzes{opacity:1}
 .pino small{display:block;font:500 11px/1 var(--f-corpo);letter-spacing:.14em;text-transform:uppercase;color:#7a6e62;margin-top:4px}
 .pino .anel{position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--pc);opacity:0;animation:anel 2.6s ease-out infinite}
 @keyframes anel{0%{opacity:.7;transform:scale(.8)}100%{opacity:0;transform:scale(1.5)}}
-@keyframes flutua{50%{margin-top:-6px}}
+@keyframes flutua{50%{translate:0 -6px}}
 body:not([data-casa="universo"]) .pino{opacity:0;pointer-events:none}
 
 /* texto sobre o palco */

@@ -62,6 +62,7 @@ function stripes(a, b, c, d, n, c1, c2, extra = "") {
 // ---------- coleções ordenáveis ----------
 const items = [];   // {d, svg}
 const lights = [];  // camada noturna
+const anim = [];    // camada animada leve (ondas + baleia), separada para não repintar o mapa inteiro
 const add = (p, svg) => items.push({ d: depth(p), svg });
 
 // ---------- peças ----------
@@ -166,18 +167,18 @@ const ZL = BASE_Z + 30 + 30;  // topo da grama
 // espuma na beira
 const foam = [];
 for (let i = 0; i <= 80; i++) { const x = PLATE.x + (PLATE.w * i) / 80; foam.push([x, COAST - 3 - Math.sin(i * 0.9) * 2.2]); }
-ground.push(line(k.onTop(foam, WATER_TOP + 0.2, P), "#ffffff", 2.2, 'class="foam" stroke-opacity=".85"'));
+ground.push(line(k.onTop(foam, WATER_TOP + 0.2, P), "#ffffff", 2.2, 'stroke-opacity=".85" stroke-dasharray="60 10 30 14"'));
 // ondas (animadas no CSS)
 for (let j = 0; j < 6; j++) {
-  const yy = COAST - 16 - j * 18;
+  const yy = COAST - 24 - j * 18;
   if (yy < PLATE.y + 10) continue;
   const wv = [];
   const x0 = PLATE.x + 30 + ((j * 53) % 90), x1 = x0 + 120 + (j % 3) * 60;
   for (let x = x0; x <= Math.min(x1, PLATE.x + PLATE.w - 10); x += 6) wv.push([x, yy + Math.sin(x * 0.12 + j) * 2]);
-  ground.push(line(k.onTop(wv, WATER_TOP + 0.2, P), "#ffffff", 1.1, `class="wave w${j % 3}" stroke-opacity=".55"`));
+  anim.push(line(k.onTop(wv, WATER_TOP + 0.2, P), "#ffffff", 1.1, `class="wave w${j % 3}" stroke-opacity=".55"`));
   const x2 = x1 + 70; const wv2 = [];
   for (let x = x2; x <= Math.min(x2 + 110, PLATE.x + PLATE.w - 10); x += 6) wv2.push([x, yy - 8 + Math.sin(x * 0.12 + j) * 2]);
-  if (wv2.length > 2) ground.push(line(k.onTop(wv2, WATER_TOP + 0.2, P), "#ffffff", 1.1, `class="wave w${(j + 1) % 3}" stroke-opacity=".5"`));
+  if (wv2.length > 2) anim.push(line(k.onTop(wv2, WATER_TOP + 0.2, P), "#ffffff", 1.1, `class="wave w${(j + 1) % 3}" stroke-opacity=".5"`));
 }
 // areia
 const SAND = { x: PLATE.x, y: COAST, w: PLATE.w, d: DUNE - COAST, r: 0 };
@@ -465,9 +466,34 @@ const defs = `<defs>
 <linearGradient id="seaSide" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2aa9b4" stop-opacity=".9"/><stop offset="1" stop-color="#0e4a6b" stop-opacity=".95"/></linearGradient>
 </defs>`;
 const vb = `0 0 ${W} ${H}`;
-const base = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" class="map-svg" role="img" aria-label="Mapa ilustrado da Praia de Guaratiba com as três casas do Sorriso Baiano">${defs}<g class="ground">${ground.join("")}</g><g class="things">${items.map((i) => i.svg).join("")}</g>${whale}</svg>`;
-const lightSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" class="map-lights" aria-hidden="true">${lights.join("")}</svg>`;
+const base = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" class="map-svg" role="img" aria-label="Mapa ilustrado da Praia de Guaratiba com as três casas do Sorriso Baiano">${defs}<g class="ground">${ground.join("")}</g><g class="things">${items.map((i) => i.svg).join("")}</g></svg>`;
+const animSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" class="map-anim">${anim.join("")}${whale}</svg>`;
+writeFileSync(new URL("../assets/map-anim.svg", import.meta.url), animSvg);
+// brilho "assado" no próprio SVG (halo em gradiente) — sem filtro CSS, que pesava na animação da câmera
+const halos = [];
+const lightsTxt = lights.join("");
+for (const m of lightsTxt.matchAll(/<circle class="(bulb|lantern)" cx="([\d.-]+)" cy="([\d.-]+)"/g)) {
+  const r = m[1] === "lantern" ? 12 : 6.5;
+  halos.push(`<circle cx="${m[2]}" cy="${m[3]}" r="${r}" fill="url(#halo)"/>`);
+}
+const lightSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" class="map-lights" aria-hidden="true"><defs><radialGradient id="halo"><stop offset="0" stop-color="#ffd27a" stop-opacity=".85"/><stop offset=".45" stop-color="#ffb44d" stop-opacity=".35"/><stop offset="1" stop-color="#ffb44d" stop-opacity="0"/></radialGradient></defs><g>${halos.join("")}</g>${lightsTxt}</svg>`;
 writeFileSync(new URL("../assets/map-base.svg", import.meta.url), base);
+// versões pré-coloridas por hora do dia (mesmas matrizes que antes iam no filtro CSS) — trocar de hora vira um crossfade barato
+const MATRIZES = {
+  manha: [1.03, 0.03, 0, 0.02, 0, 1.0, 0.02, 0.012, 0, 0, 0.94, 0.012],
+  por: [1.02, 0.12, 0, 0.03, 0.05, 0.80, 0.05, 0.01, 0.02, 0.06, 0.62, 0.02],
+  noite: [0.20, 0.07, 0.05, 0.012, 0.07, 0.24, 0.09, 0.022, 0.09, 0.19, 0.46, 0.07],
+};
+for (const [nome, m] of Object.entries(MATRIZES)) {
+  const tinge = (h) => {
+    let c = h.length === 4 ? "#" + h[1] + h[1] + h[2] + h[2] + h[3] + h[3] : h;
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16) / 255);
+    const o = [0, 1, 2].map((k) => Math.max(0, Math.min(1, m[k * 4] * r + m[k * 4 + 1] * g + m[k * 4 + 2] * b + m[k * 4 + 3])));
+    return "#" + o.map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("");
+  };
+  const v = base.replace(/#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b/g, tinge);
+  writeFileSync(new URL(`../assets/map-base-${nome}.svg`, import.meta.url), v);
+}
 writeFileSync(new URL("../assets/map-lights.svg", import.meta.url), lightSvg);
 const toPct = ([x, y]) => [+(x / W * 100).toFixed(2), +(y / H * 100).toFixed(2)];
 const metaOut = { width: W, height: H };

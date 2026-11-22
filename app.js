@@ -68,8 +68,8 @@
   let horaManual = null, horaAtual = "tarde";
   function aplicaHora(h) {
     horaAtual = h;
-    if (document.body.dataset.hora !== h) { const mb = $("#mapaBase"); mb.classList.add("trocando"); setTimeout(() => mb.classList.remove("trocando"), 320); setTimeout(() => (document.body.dataset.hora = h), 180); }
-    else document.body.dataset.hora = h;
+    document.body.dataset.hora = h;
+    if (META) pintaMapa(h);
     $$(".hora-opcoes button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.hora === h)));
     const agora = new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" }).format(new Date());
     $("#horaAgora").innerHTML = horaManual ? `Vendo Guaratiba <b>${HORAS[h]}</b>` : `Agora em Guaratiba · <b>${agora}</b>`;
@@ -87,13 +87,32 @@
   let META = null, camera = { s: 1, x: 0, y: 0 }, pan = { x: 0, y: 0 };
   const movel = () => innerWidth < 760;
 
+  /* mapa pré-colorido por hora: troca com crossfade (sem filtro recalculado a cada quadro) */
+  const VARIANTE = { manha: "map-base-manha.svg", tarde: "map-base.svg", "por-do-sol": "map-base-por.svg", noite: "map-base-noite.svg" };
+  const svgs = {};
+  const svgDaHora = (h) => (svgs[h] ||= fetch(`assets/${VARIANTE[h]}?v=20261122d`).then((r) => r.text()));
+  async function pintaMapa(h, imediato = false) {
+    const txt = await svgDaHora(h);
+    if (horaAtual !== h) return;
+    const box = $("#mapaBase");
+    if (box.lastElementChild?.dataset.h === h) return;
+    const nova = document.createElement("div");
+    nova.className = "camada"; nova.dataset.h = h; nova.innerHTML = txt;
+    box.appendChild(nova);
+    const antigas = [...box.children].filter((c) => c !== nova);
+    if (imediato || reduz) { nova.classList.add("on"); antigas.forEach((c) => c.remove()); return; }
+    requestAnimationFrame(() => requestAnimationFrame(() => nova.classList.add("on")));
+    setTimeout(() => antigas.forEach((c) => c.remove()), 1400);
+  }
+
   async function carregaMapa() {
-    const [base, luzes, meta] = await Promise.all([
-      fetch("assets/map-base.svg?v=20261122c").then((r) => r.text()),
-      fetch("assets/map-lights.svg?v=20261122c").then((r) => r.text()),
-      fetch("assets/map-meta.json?v=20261122c").then((r) => r.json()),
+    const [, anim, luzes, meta] = await Promise.all([
+      pintaMapa(horaAtual, true),
+      fetch("assets/map-anim.svg?v=20261122d").then((r) => r.text()),
+      fetch("assets/map-lights.svg?v=20261122d").then((r) => r.text()),
+      fetch("assets/map-meta.json?v=20261122d").then((r) => r.json()),
     ]);
-    $("#mapaBase").innerHTML = base;
+    $("#mapaAnim").innerHTML = anim;
     $("#mapaLuzes").innerHTML = luzes;
     META = meta;
     // pinos
@@ -111,6 +130,7 @@
       w.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fala(); } });
     }
     enquadra(rota().casa, true);
+    setTimeout(() => Object.keys(VARIANTE).forEach(svgDaHora), 2500);
   }
 
   function enquadra(casa, imediato = false) {
@@ -128,6 +148,7 @@
     camera = { s, x: W * ax - fx * 1600 * s, y: H * ay - fy * 1100 * s };
     pan = { x: 0, y: 0 };
     mapa.classList.toggle("sem-anim", imediato || reduz);
+    if (!imediato && !reduz) { mapa.classList.add("voando"); clearTimeout(enquadra.t); enquadra.t = setTimeout(() => mapa.classList.remove("voando"), 1300); }
     aplicaCamera();
     if (imediato) requestAnimationFrame(() => mapa.classList.remove("sem-anim"));
     // pinos mantêm tamanho legível
