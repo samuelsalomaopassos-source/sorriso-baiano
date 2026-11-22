@@ -82,7 +82,7 @@ window.SB = {
         ]},
       ],
       pratos: ["mamma-mia", "che-figata", "fettuccine"],
-      instagramPosts: ["DcBZZYpx5rb", "DeO_m3zRCTe", "DeYJx7kxELr"],
+      instagramPosts: ["DcBZZYpx5rb", "DbTxw_0MO5n", "DeYJx7kxELr"],
     },
 
     restaurante: {
@@ -151,7 +151,7 @@ window.SB = {
       ],
       cardapioNota: "O cardápio completo e a carta de drinks entram na versão oficial do site, atualizados direto pela equipe.",
       pratos: ["morena-do-mar"],
-      instagramPosts: ["DfhtFAtkV7k", "Dd1r07FxeXS", "DeAGYu0uW7w"],
+      instagramPosts: ["DfUsanHxhOu", "Dd1r07FxeXS", "DeAGYu0uW7w"],
     },
   },
 
