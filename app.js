@@ -81,9 +81,9 @@
 
   async function carregaMapa() {
     const [base, luzes, meta] = await Promise.all([
-      fetch("assets/map-base.svg").then((r) => r.text()),
-      fetch("assets/map-lights.svg").then((r) => r.text()),
-      fetch("assets/map-meta.json").then((r) => r.json()),
+      fetch("assets/map-base.svg?v=20261122b").then((r) => r.text()),
+      fetch("assets/map-lights.svg?v=20261122b").then((r) => r.text()),
+      fetch("assets/map-meta.json?v=20261122b").then((r) => r.json()),
     ]);
     $("#mapaBase").innerHTML = base;
     $("#mapaLuzes").innerHTML = luzes;
