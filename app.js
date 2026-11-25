@@ -478,4 +478,17 @@
   rodape();
   addEventListener("hashchange", navega);
   carregaPlanilha().then(() => { navega(); solido(); carregaMapa(); });
+
+  // quem chega pelo site do Shopping Guaratiba ganha um atalho de volta para a varanda
+  try {
+    const q = new URLSearchParams(location.search);
+    if (q.get("de") === "shopping") sessionStorage.setItem("sb-de-shopping", "1");
+    if (sessionStorage.getItem("sb-de-shopping")) {
+      const a = document.createElement("a");
+      a.className = "volta-shopping";
+      a.href = "https://samuelsalomaopassos-source.github.io/guaratiba-shopping/?em=sorriso-baiano";
+      a.innerHTML = '<span aria-hidden="true">←</span> Shopping Guaratiba';
+      document.body.appendChild(a);
+    }
+  } catch (_) {}
 })();
